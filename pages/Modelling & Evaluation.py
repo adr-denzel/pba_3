@@ -24,4 +24,11 @@ sns.heatmap(corr_mat, ax=ax_corr, annot=True, cmap='coolwarm')
 
 ax_corr.set_title('Correlation Matrix')
 
+# modeling
+
+
+
 st.pyplot(fig_corr)
+
+# evaluation
+

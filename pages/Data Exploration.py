@@ -89,3 +89,5 @@ plt.title(f"Bar Chart of {category_column} (Count of Instances per Target Catego
 
 st.pyplot(plt.gcf())
 plt.clf()
+
+st.subheader('Now we may progress to the modeling phase.')

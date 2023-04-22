@@ -89,18 +89,3 @@ plt.title(f"Bar Chart of {category_column} (Count of Instances per Target Catego
 
 st.pyplot(plt.gcf())
 plt.clf()
-
-# correlation matrix
-st.subheader('Correlation Matrix')
-st.write('With a correlation matrix we can condense the information within feature interactions and relations '
-         'to identify features whose signals are highly synchronised.')
-st.write('This helps in eliminating combinations of features to keep model biases balanced.')
-
-corr_mat = df[data_vars_num].corr()
-
-fig_corr, ax_corr = plt.subplots(figsize=(15, 12))
-sns.heatmap(corr_mat, ax=ax_corr, annot=True, cmap='coolwarm')
-
-ax_corr.set_title('Correlation Matrix')
-
-st.pyplot(fig_corr)

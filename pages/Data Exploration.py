@@ -45,7 +45,7 @@ st.write('Beginning with our numeric features we can begin to explore their indi
 x_var_hist = st.selectbox('Select a variable', options=data_vars_num)
 bins_hist = st.slider("Number of bins", min_value=5, max_value=50, value=5)
 
-sns.histplot(data=df, x=x_var_hist, bins=bins_hist, kde=False)
+sns.histplot(data=df, x=x_var_hist, bins=bins_hist, color='green')
 plt.xlabel(x_var_hist)
 plt.ylabel("Frequency")
 plt.title(f"Histogram of {x_var_hist}")

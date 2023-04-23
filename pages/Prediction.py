@@ -17,7 +17,7 @@ st.image(image,
          caption='Source: https://static.vecteezy.com/system/resources/previews/014/563/665/original/investment-forecast-or-prediction-vision-to-see-investing-opportunity-future-profit-from-stock-and-crypto-trading-concept-flat-modern-illustration-vector.jpg',
          use_column_width=True)
 
-st.sidebar.info('Select feature values to make a customer churn prediction:')
+st.sidebar.info('Select values and make a prediction:')
 
 age = st.sidebar.slider('Age:', min_value=18, max_value=100, value=30)
 gender = st.sidebar.selectbox('Gender:', ['Male', 'Female'])
@@ -49,8 +49,8 @@ total_ct_change_q4_q1 = st.sidebar.slider('Total Transactions Count Change Q4 to
 avg_utilisation_rate = total_revolving_balance / credit_limit
 avg_open_to_buy = credit_limit - total_revolving_balance
 
-output = ""
-output_prob = ""
+output = 0.12
+output_prob = 0.55
 input_dict = {
     "Customer_Age": age,
     "Gender": gender,
@@ -81,5 +81,8 @@ if st.sidebar.button("Predict"):
 	output_prob = float(y_pred)
 	output = bool(churn)
 	'''
-st.success('Churn: {}'.format(output))
-st.success('Probability of Churn: {}'.format(output))
+
+m1, m2, m3 = st.columns((1, 1, 1))
+m1.write('')
+m2.metric('Churn Prediction: ', value=str(output))
+m3.metric('Probability of Prediction: ', value=str(round(float(output_prob * 100), 2)) + '%')

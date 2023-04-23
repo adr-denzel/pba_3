@@ -3,15 +3,27 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from PIL import Image
 
 # Load the CSV data
 df = pd.read_csv('BankChurners_processed.csv')
 
 # an introduction to the dataset
-st.title('Data Introduction')
-st.write('The table below is a sample from the dataset moulded expressly for addressing this business problem:')
+st.title('Feel the Churn')
 
-st.dataframe(df.head(5).T)
+image = Image.open('images/6-Ways-CRM-Stop-Customer-Churn.png')
+st.image(image, caption='Source: https://cdn.technologyadvice.com/wp-content/uploads/2020/03/6-Ways-CRM-Stop-Customer-Churn.png', use_column_width=True)
+
+st.write('Customer attrition across our suite of credit card products has has been increasing of late. '
+         'Churn across this product grouping impacts revenue, reputation, and our position within in a competitive '
+         'market landscape.')
+st.write('Instead of succumbing to this swath of customer churn, by processing and modeling our customer data '
+         'we can proactively classify customers who are likely to churn, ***and before they do***, implement interventions '
+         'designed to retain their business and improve their customer satisfaction.')
+
+st.header('Understanding a Churner')
+
+
 
 # paragraphs
 st.write('With a mixture of both numeric and categorical data, a thorough exploration of the data is needed to '

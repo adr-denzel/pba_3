@@ -8,7 +8,7 @@ model_file = 'random_forest_clf.pickle'
 with open(model_file, 'rb') as f_in:
     model = pickle.load(f_in)
 
-st.title("Predicting a Churner")
+st.title("Let's Find a Churner")
 
 image = Image.open(
     'images/investment-forecast-or-prediction-vision-to-see-investing-opportunity-future-profit-from-stock-and-crypto-trading-concept-flat-modern-illustration-vector.jpg')

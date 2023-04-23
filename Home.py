@@ -23,11 +23,12 @@ overall_total = overall_attrition + overall_retained
 overall_lost_business = df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
 overall_retained_business = df[df['Attrition_Flag'] == 'Existing Customer']['Total_Revolving_Bal'].sum()
 
-
 m1, m2, m3 = st.columns((1, 1, 1))
 
+overall_churn_rate = round(float(overall_attrition/overall_total)*100, 2)
+
 m1.metric(label='Full Customer Population: ', value=f'{overall_total:,}')
-m2.metric(label='Churn Rate within Population: ', value=str(round(float(overall_attrition/overall_total)*100, 2)) + '%')
+m2.metric(label='Churn Rate within Population: ', value=str(overall_churn_rate) + '%')
 m3.metric(label='Value of Lost Business: ', value=f'${overall_lost_business:,}' + '.00')
 
 m4, m5, m6 = st.columns((1, 1, 1))
@@ -47,11 +48,19 @@ data_vars_num = ['Customer_Age', 'Dependent_count', 'Months_on_book', 'Total_Rel
 
 data_vars_cat = ['Gender', 'Education_Level', 'Marital_Status', 'Income_Category', 'Card_Category']
 
+selected_features = st.multiselect("Select a feature or more:", options=data_vars_cat)
 
-selected_feature = st.selectbox("Select a feature:", options=data_vars_cat)
-selected_category = st.selectbox("Select a category:", options=df[selected_feature].unique())
+filters = {}
 
-filtered_df = df[df[selected_feature] == selected_category]
+for feature in selected_features:
+    unique_values = df[feature].unique()
+    selected_values = st.multiselect(f'Select {feature} Values', options=unique_values, default=unique_values)
+    filters[feature] = selected_values
+
+filtered_df = df.copy()
+
+for feature, selected_values in filters.items():
+    filtered_df = filtered_df[filtered_df[feature].isin(selected_values)]
 
 count_attrition = len(filtered_df[df['Attrition_Flag'] == 'Attrited Customer'])
 count_retained = len(filtered_df[df['Attrition_Flag'] == 'Existing Customer'])
@@ -59,17 +68,18 @@ total_filter = count_retained + count_attrition
 
 lost_business = filtered_df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
 
+if (total_filter > 0):
+    sliced_churn_rate = round(float(count_attrition/total_filter)*100, 2) or 0
+else:
+    sliced_churn_rate = 0
+
 m7, m8, m9 = st.columns((1, 1, 1))
 
 m7.metric(label='Sliced Customer Population: ', value=int(total_filter))
-m8.metric(label='Population Churn Rate: ', value=str(round(float(count_attrition/total_filter)*100, 2)) + '%')
+m8.metric(label='Population Churn Rate: ', value=str(sliced_churn_rate) + '%')
 m9.metric(label='Value of Lost Business: ', value=f'${lost_business:,}' + '.00')
 
-
 # churner vizualisations
-st.header('Understanding a Churner')
-
-
 
 # histograms
 st.subheader('Histograms')
@@ -103,7 +113,6 @@ plt.title(f"Scatter plot of {x_scatter} vs {y_scatter}")
 st.pyplot(plt.gcf())
 plt.clf()
 
-
 # bar charts
 st.subheader('Bar Charts')
 
@@ -117,5 +126,3 @@ plt.title(f"Bar Chart of {category_column} (Count of Instances per Target Catego
 
 st.pyplot(plt.gcf())
 plt.clf()
-
-st.subheader('Now we may progress to the modeling phase.')

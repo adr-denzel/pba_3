@@ -17,7 +17,7 @@ st.image(image,
          caption='Source: https://static.vecteezy.com/system/resources/previews/014/563/665/original/investment-forecast-or-prediction-vision-to-see-investing-opportunity-future-profit-from-stock-and-crypto-trading-concept-flat-modern-illustration-vector.jpg',
          use_column_width=True)
 
-st.sidebar.info('Here you can select feature values to make a customer churn prediction:')
+st.sidebar.info('Select feature values to make a customer churn prediction:')
 
 age = st.sidebar.slider('Age:', min_value=18, max_value=100, value=30)
 gender = st.sidebar.selectbox('Gender:', ['Male', 'Female'])

@@ -14,36 +14,19 @@ st.title('Feel the Churn')
 image = Image.open('images/6-Ways-CRM-Stop-Customer-Churn.png')
 st.image(image, caption='Source: https://cdn.technologyadvice.com/wp-content/uploads/2020/03/6-Ways-CRM-Stop-Customer-Churn.png', use_column_width=True)
 
-st.write('Customer attrition across our suite of credit card products has has been increasing of late. '
-         'Churn across this product grouping impacts revenue, reputation, and our position within in a competitive '
-         'market landscape.')
-st.write('Instead of succumbing to this swath of customer churn, by processing and modeling our customer data '
-         'we can proactively classify customers who are likely to churn, ***and before they do***, implement interventions '
-         'designed to retain their business and improve their customer satisfaction.')
+st.sidebar.info('Select features to filter by to investigate what drives customer churn:')
+
+m1, m2, m3, m4, m5 = st.columns((1, 1, 1, 1, 1))
+
+
+
+m1.write('')
+m2.metric(label='Total Number of Customers', value=int(to['Value']), delta=str(int(to['Previous']))+' Compared to 1 hour ago', delta_color = 'inverse')
+m3.metric(label='Current Handover Average', value=str(int(ch['Value']))+" Mins", delta = str(int(ch['Previous']))+' Compared to 1 hour ago', delta_color = 'inverse')
+m4.metric(label='Time Lost today (Above 15 mins)', value=str(int(hl['Value']))+" Hours", delta = str(int(hl['Previous']))+' Compared to yesterday')
+m1.write('')
 
 st.header('Understanding a Churner')
-
-
-
-# paragraphs
-st.write('With a mixture of both numeric and categorical data, a thorough exploration of the data is needed to '
-         'effectively assess its relative potential within possible modeling paradigms.')
-
-st.write('By beginning with visualisations of our data, we can start to assess how workable, complete, '
-         'or even potentially inappropriate features may or may not be for particular modeling solutions.')
-
-st.write('We also begin to understand the ***shape*** of our data. This can lead to discovering trends or patterns '
-         'that would not be as readily apparent if the data is simply examined as a structured table.')
-
-st.header('Feature Summary')
-st.write('* Categorical target feature: ***Attrition_Flag***. This is a **binary classification** problem.')
-st.write('* 14 Numeric features: ***Customer_Age***, ***Dependent_count***, ***Months_on_book***, ***Total_Relationship_Count***, '
-         '***Months_Inactive_12_mon***, ***Contacts_Count_12_mon***, ***Credit_Limit***, ***Total_Revolving_Bal***, ***Avg_Open_To_Buy*** '
-         '***Total_Amt_Chng_Q4_Q1***, ***Total_Trans_Amt***, ***Total_Trans_Ct***, ***Total_Ct_Chng_Q4_Q1***, ***Avg_Utilization_Ratio***')
-st.write('* 5 Categorical features: ***Gender***, ***Education_Level***, ***Marital_Status***, ***Income_Category***, ***Card_Category***')
-
-# exploratory analysis with histograms for numeric data
-st.header('Feature Exploration')
 
 # Add a widget to choose variables
 data_vars_num = ['Customer_Age', 'Dependent_count', 'Months_on_book', 'Total_Relationship_Count',
@@ -53,7 +36,6 @@ data_vars_num = ['Customer_Age', 'Dependent_count', 'Months_on_book', 'Total_Rel
 
 # histograms
 st.subheader('Histograms')
-st.write('Beginning with our numeric features we can begin to explore their individual distributions with histograms.')
 
 x_var_hist = st.selectbox('Select a variable', options=data_vars_num)
 bins_hist = st.slider("Number of bins", min_value=5, max_value=50, value=5)
@@ -68,8 +50,6 @@ plt.clf()
 
 # scatter plots
 st.subheader('Scatter Plots')
-st.write('Scatter plots help us explore the interactions and relations between numeric variables in a 2-d setting.')
-st.write('Labelling our points on the plot with their target feature categorizations could aid in uncovering useful patterns.')
 
 x_scatter = st.selectbox("Select the x-axis column", data_vars_num, index=0)
 y_scatter = st.selectbox("Select the y-axis column", data_vars_num, index=1)
@@ -90,7 +70,6 @@ data_vars_cat = ['Gender', 'Education_Level', 'Marital_Status', 'Income_Category
 
 # bar charts
 st.subheader('Bar Charts')
-st.write('With bar charts we get a sense of the count and proportions of our population our target categories occupy.')
 
 category_column = st.selectbox("Select the categorical column for the bar chart", data_vars_cat)
 

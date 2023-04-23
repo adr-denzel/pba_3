@@ -14,6 +14,29 @@ st.title('Feel the Churn')
 image = Image.open('images/6-Ways-CRM-Stop-Customer-Churn.png')
 st.image(image, caption='Source: https://cdn.technologyadvice.com/wp-content/uploads/2020/03/6-Ways-CRM-Stop-Customer-Churn.png', use_column_width=True)
 
+st.header('Overall Picture')
+
+overall_attrition = len(df[df['Attrition_Flag'] == 'Attrited Customer'])
+overall_retained = len(df[df['Attrition_Flag'] == 'Existing Customer'])
+overall_total = overall_attrition + overall_retained
+
+overall_lost_business = df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
+overall_retained_business = df[df['Attrition_Flag'] == 'Existing Customer']['Total_Revolving_Bal'].sum()
+
+
+m1, m2, m3 = st.columns((1, 1, 1))
+
+m1.metric(label='Full Customer Population: ', value=f'{overall_total:,}')
+m2.metric(label='Churn Rate within Population: ', value=str(round(float(overall_attrition/overall_total)*100, 2)) + '%')
+m3.metric(label='Value of Lost Business: ', value=f'${overall_lost_business:,}' + '.00')
+
+m4, m5, m6 = st.columns((1, 1, 1))
+
+m4.metric(label='Churned Customer Population: ', value=f'{overall_attrition:,}')
+m5.metric(label='Retained Customer Population: ', value=f'{overall_retained:,}')
+m6.metric(label='Value of Retained Business: ', value=f'${overall_retained_business:,}' + '.00')
+
+st.header('Slicing that Picture')
 st.info('Select features to filter by:')
 
 # Add a widget to choose variables
@@ -32,20 +55,19 @@ filtered_df = df[df[selected_feature] == selected_category]
 
 count_attrition = len(filtered_df[df['Attrition_Flag'] == 'Attrited Customer'])
 count_retained = len(filtered_df[df['Attrition_Flag'] == 'Existing Customer'])
-total = count_retained + count_attrition
+total_filter = count_retained + count_attrition
 
 lost_business = filtered_df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
 
-m2, m3, m4 = st.columns((1, 1, 1))
+m7, m8, m9 = st.columns((1, 1, 1))
 
-m2.metric(label='Total Number of Customers: ', value=int(total))
-m3.metric(label='Attrition Rate: ', value=str(round(float(count_attrition/total)*100, 2)) + '%')
-m4.metric(label='Value of Lost Business: ', value=int(lost_business))
+m7.metric(label='Sliced Customer Population: ', value=int(total_filter))
+m8.metric(label='Population Churn Rate: ', value=str(round(float(count_attrition/total_filter)*100, 2)) + '%')
+m9.metric(label='Value of Lost Business: ', value=f'${lost_business:,}' + '.00')
 
 
 # churner vizualisations
 st.header('Understanding a Churner')
-
 
 
 

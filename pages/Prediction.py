@@ -8,7 +8,7 @@ model_file = 'random_forest_clf.pickle'
 with open(model_file, 'rb') as f_in:
     model = pickle.load(f_in)
 
-st.title("Let's Find a Churner")
+st.title("Find a Churner")
 
 image = Image.open(
     'images/investment-forecast-or-prediction-vision-to-see-investing-opportunity-future-profit-from-stock-and-crypto-trading-concept-flat-modern-illustration-vector.jpg')
@@ -49,7 +49,7 @@ total_ct_change_q4_q1 = st.sidebar.slider('Total Transactions Count Change Q4 to
 avg_utilisation_rate = total_revolving_balance / credit_limit
 avg_open_to_buy = credit_limit - total_revolving_balance
 
-output = 0.12
+output = 1
 output_prob = 0.55
 input_dict = {
     "Customer_Age": age,
@@ -82,7 +82,6 @@ if st.sidebar.button("Predict"):
 	output = bool(churn)
 	'''
 
-m1, m2, m3 = st.columns((1, 1, 1))
-m1.write('')
-m2.metric('Churn Prediction: ', value=str(output))
+m2, m3 = st.columns((1, 1))
+m2.metric('Prediction: ', value=('Customer Churned' if output < 0.5 else 'Customer Retained'))
 m3.metric('Probability of Prediction: ', value=str(round(float(output_prob * 100), 2)) + '%')

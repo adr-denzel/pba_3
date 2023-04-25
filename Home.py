@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -12,7 +11,9 @@ df = pd.read_csv('BankChurners_processed.csv')
 st.title('Feel the Churn')
 
 image = Image.open('images/6-Ways-CRM-Stop-Customer-Churn.png')
-st.image(image, caption='Source: https://cdn.technologyadvice.com/wp-content/uploads/2020/03/6-Ways-CRM-Stop-Customer-Churn.png', use_column_width=True)
+st.image(image,
+         caption='Source: https://cdn.technologyadvice.com/wp-content/uploads/2020/03/6-Ways-CRM-Stop-Customer-Churn.png',
+         use_column_width=True)
 
 st.header('Overall Picture')
 
@@ -25,7 +26,7 @@ overall_retained_business = df[df['Attrition_Flag'] == 'Existing Customer']['Tot
 
 m1, m2, m3 = st.columns((1, 1, 1))
 
-overall_churn_rate = round(float(overall_attrition/overall_total)*100, 2)
+overall_churn_rate = round(float(overall_attrition / overall_total) * 100, 2)
 
 m1.metric(label='Full Customer Population: ', value=f'{overall_total:,}')
 m2.metric(label='Churn Rate within Population: ', value=str(overall_churn_rate) + '%')
@@ -42,9 +43,9 @@ st.info('Select features to filter by:')
 
 # Add a widget to choose variables
 data_vars_num = ['Customer_Age', 'Dependent_count', 'Months_on_book', 'Total_Relationship_Count',
-             'Months_Inactive_12_mon', 'Contacts_Count_12_mon', 'Credit_Limit', 'Total_Revolving_Bal',
-             'Avg_Open_To_Buy', 'Total_Amt_Chng_Q4_Q1', 'Total_Trans_Amt', 'Total_Trans_Ct',
-             'Total_Ct_Chng_Q4_Q1', 'Avg_Utilization_Ratio']
+                 'Months_Inactive_12_mon', 'Contacts_Count_12_mon', 'Credit_Limit', 'Total_Revolving_Bal',
+                 'Avg_Open_To_Buy', 'Total_Amt_Chng_Q4_Q1', 'Total_Trans_Amt', 'Total_Trans_Ct',
+                 'Total_Ct_Chng_Q4_Q1', 'Avg_Utilization_Ratio']
 
 data_vars_cat = ['Gender', 'Education_Level', 'Marital_Status', 'Income_Category', 'Card_Category']
 
@@ -68,8 +69,8 @@ total_filter = count_retained + count_attrition
 
 lost_business = filtered_df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
 
-if (total_filter > 0):
-    sliced_churn_rate = round(float(count_attrition/total_filter)*100, 2) or 0
+if total_filter > 0:
+    sliced_churn_rate = round(float(count_attrition / total_filter) * 100, 2) or 0
 else:
     sliced_churn_rate = 0
 
@@ -81,48 +82,55 @@ m9.metric(label='Value of Lost Business: ', value=f'${lost_business:,}' + '.00')
 
 # churner vizualisations
 
+# pie charts of the population churn rate as well as the value of the balance lost on that population, to the balance retained
+
+
 # histograms
-st.subheader('Histograms')
 
-x_var_hist = st.selectbox('Select a variable', options=data_vars_num)
-bins_hist = st.slider("Number of bins", min_value=5, max_value=50, value=5)
+# st.subheader('Histograms')
 
-sns.histplot(data=df, x=x_var_hist, bins=bins_hist, color='green')
-plt.xlabel(x_var_hist)
-plt.ylabel("Frequency")
-plt.title(f"Histogram of {x_var_hist}")
+# x_var_hist = st.selectbox('Select a variable', options=data_vars_num)
+# bins_hist = st.slider("Number of bins", min_value=5, max_value=50, value=5)
 
-st.pyplot(plt.gcf())
-plt.clf()
+# sns.histplot(data=df, x=x_var_hist, bins=bins_hist, color='green')
+# plt.xlabel(x_var_hist)
+# plt.ylabel("Frequency")
+# plt.title(f"Histogram of {x_var_hist}")
+
+# st.pyplot(plt.gcf())
+# plt.clf()
 
 
 # scatter plots
-st.subheader('Scatter Plots')
 
-x_scatter = st.selectbox("Select the x-axis column", data_vars_num, index=0)
-y_scatter = st.selectbox("Select the y-axis column", data_vars_num, index=1)
+# st.subheader('Scatter Plots')
 
-color_column = 'Attrition_Flag'
+# x_scatter = st.selectbox("Select the x-axis column", data_vars_num, index=0)
+# y_scatter = st.selectbox("Select the y-axis column", data_vars_num, index=1)
 
-sns.scatterplot(data=df, x=x_scatter, y=y_scatter, hue=color_column)
+# color_column = 'Attrition_Flag'
 
-plt.xlabel(x_scatter)
-plt.ylabel(y_scatter)
-plt.title(f"Scatter plot of {x_scatter} vs {y_scatter}")
+# sns.scatterplot(data=df, x=x_scatter, y=y_scatter, hue=color_column)
 
-st.pyplot(plt.gcf())
-plt.clf()
+# plt.xlabel(x_scatter)
+# plt.ylabel(y_scatter)
+# plt.title(f"Scatter plot of {x_scatter} vs {y_scatter}")
+
+# st.pyplot(plt.gcf())
+# plt.clf()
+
 
 # bar charts
-st.subheader('Bar Charts')
 
-category_column = st.selectbox("Select the categorical column for the bar chart", data_vars_cat)
+# st.subheader('Bar Charts')
 
-sns.countplot(data=df, x=category_column, hue=color_column)
+# category_column = st.selectbox("Select the categorical column for the bar chart", data_vars_cat)
 
-plt.xlabel(category_column)
-plt.ylabel("Count")
-plt.title(f"Bar Chart of {category_column} (Count of Instances per Target Category)")
+# sns.countplot(data=df, x=category_column, hue=color_column)
 
-st.pyplot(plt.gcf())
-plt.clf()
+# plt.xlabel(category_column)
+# plt.ylabel("Count")
+# plt.title(f"Bar Chart of {category_column} (Count of Instances per Target Category)")
+
+# st.pyplot(plt.gcf())
+# plt.clf()

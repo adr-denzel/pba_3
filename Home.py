@@ -68,6 +68,7 @@ count_retained = len(filtered_df[df['Attrition_Flag'] == 'Existing Customer'])
 total_filter = count_retained + count_attrition
 
 lost_business = filtered_df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
+retained_business = filtered_df[df['Attrition_Flag'] == 'Existing Customer']['Total_Revolving_Bal'].sum()
 
 if total_filter > 0:
     sliced_churn_rate = round(float(count_attrition / total_filter) * 100, 2) or 0
@@ -76,61 +77,63 @@ else:
 
 m7, m8, m9 = st.columns((1, 1, 1))
 
-m7.metric(label='Sliced Customer Population: ', value=int(total_filter))
+m7.metric(label='Sliced Customer Population: ', value=f'{total_filter:,}')
 m8.metric(label='Population Churn Rate: ', value=str(sliced_churn_rate) + '%')
 m9.metric(label='Value of Lost Business: ', value=f'${lost_business:,}' + '.00')
 
-# churner vizualisations
-
 # pie charts of the population churn rate as well as the value of the balance lost on that population, to the balance retained
+m10, m11 = st.columns((1, 1))
 
+# population chart
 
-# histograms
+data_2 = {
+    'Category': ['Attrited', 'Retained'],
+    'Values': [count_attrition, count_retained],
+}
 
-# st.subheader('Histograms')
+df_pie_2 = pd.DataFrame(data_2)
 
-# x_var_hist = st.selectbox('Select a variable', options=data_vars_num)
-# bins_hist = st.slider("Number of bins", min_value=5, max_value=50, value=5)
+# Set up Seaborn bar plot
+sns.set(style='whitegrid')
+bar_plot_2 = sns.barplot(x='Category', y='Values', data=df_pie_2, palette='pastel')
 
-# sns.histplot(data=df, x=x_var_hist, bins=bins_hist, color='green')
-# plt.xlabel(x_var_hist)
-# plt.ylabel("Frequency")
-# plt.title(f"Histogram of {x_var_hist}")
+# Convert Seaborn bar plot to a pie chart
+fig_2, ax = plt.subplots()
 
-# st.pyplot(plt.gcf())
-# plt.clf()
+# Pie chart settings
+colors = sns.color_palette('pastel')
+explode = (0.05, 0.05)
+ax.pie(df_pie_2['Values'], explode=explode, labels=df_pie_2['Category'], colors=colors, autopct='%1.1f%%', startangle=90)
 
+# Equal aspect ratio ensures that pie is drawn as a circle
+ax.axis('equal')
 
-# scatter plots
+# Display the pie chart in Streamlit
+m10.pyplot(fig_2)
 
-# st.subheader('Scatter Plots')
+# value chart
 
-# x_scatter = st.selectbox("Select the x-axis column", data_vars_num, index=0)
-# y_scatter = st.selectbox("Select the y-axis column", data_vars_num, index=1)
+data = {
+    'Category': ['Attrited', 'Retained'],
+    'Values': [lost_business, retained_business],
+}
 
-# color_column = 'Attrition_Flag'
+df_pie = pd.DataFrame(data)
 
-# sns.scatterplot(data=df, x=x_scatter, y=y_scatter, hue=color_column)
+# Set up Seaborn bar plot
+sns.set(style='whitegrid')
+bar_plot = sns.barplot(x='Category', y='Values', data=df_pie, palette='pastel')
 
-# plt.xlabel(x_scatter)
-# plt.ylabel(y_scatter)
-# plt.title(f"Scatter plot of {x_scatter} vs {y_scatter}")
+# Convert Seaborn bar plot to a pie chart
+fig, ax = plt.subplots()
 
-# st.pyplot(plt.gcf())
-# plt.clf()
+# Pie chart settings
+colors = sns.color_palette('pastel')
+explode = (0.05, 0.05)
+ax.pie(df_pie['Values'], explode=explode, labels=df_pie['Category'], colors=colors, autopct='%1.1f%%', startangle=90)
 
+# Equal aspect ratio ensures that pie is drawn as a circle
+ax.axis('equal')
 
-# bar charts
-
-# st.subheader('Bar Charts')
-
-# category_column = st.selectbox("Select the categorical column for the bar chart", data_vars_cat)
-
-# sns.countplot(data=df, x=category_column, hue=color_column)
-
-# plt.xlabel(category_column)
-# plt.ylabel("Count")
-# plt.title(f"Bar Chart of {category_column} (Count of Instances per Target Category)")
-
-# st.pyplot(plt.gcf())
-# plt.clf()
+# Display the pie chart in Streamlit
+m11.pyplot(fig)

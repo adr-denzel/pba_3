@@ -142,9 +142,9 @@ input_dict = {
     "Married": [married],
     "Single": [single],
     "Blue": [blue],
-    "Gold": [silver],
-    "Platinum": [gold],
-    "Silver": [platinum],
+    "Gold": [gold],
+    "Platinum": [platinum],
+    "Silver": [silver],
 }
 
 X = pd.DataFrame(input_dict)

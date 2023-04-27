@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -23,22 +24,79 @@ overall_total = overall_attrition + overall_retained
 
 overall_lost_business = df[df['Attrition_Flag'] == 'Attrited Customer']['Total_Revolving_Bal'].sum()
 overall_retained_business = df[df['Attrition_Flag'] == 'Existing Customer']['Total_Revolving_Bal'].sum()
+overall_churn_rate = round(float(overall_attrition / overall_total) * 100, 2)
 
 m1, m2, m3 = st.columns((1, 1, 1))
 
-overall_churn_rate = round(float(overall_attrition / overall_total) * 100, 2)
-
-m1.metric(label='Full Customer Population: ', value=f'{overall_total:,}')
-m2.metric(label='Churn Rate within Population: ', value=str(overall_churn_rate) + '%')
-m3.metric(label='Value of Lost Business: ', value=f'${overall_lost_business:,}' + '.00')
+m1.metric(label='Overall Customer Population: ', value=f'{overall_total:,}')
+m2.metric(label='Overall Customer Attrition: ', value=str(overall_churn_rate) + '%')
+m3.metric(label='Value of Business Lost: ', value=f'${overall_lost_business:,}' + '.00')
 
 m4, m5, m6 = st.columns((1, 1, 1))
 
-m4.metric(label='Churned Customer Population: ', value=f'{overall_attrition:,}')
-m5.metric(label='Retained Customer Population: ', value=f'{overall_retained:,}')
-m6.metric(label='Value of Retained Business: ', value=f'${overall_retained_business:,}' + '.00')
+m4.metric(label='Customer Population Lost: ', value=f'{overall_attrition:,}')
+m5.metric(label='Customer Population Retained: ', value=f'{overall_retained:,}')
+m6.metric(label='Value of Business Retained: ', value=f'${overall_retained_business:,}' + '.00')
 
-st.header('Slicing that Picture')
+m7, m8 = st.columns((1, 1))
+
+# count chart
+data_overall_count = {
+    'Category': ['Attrited Customers', 'Retained Customers'],
+    'Values': [overall_attrition, overall_retained],
+}
+
+df_overall_count = pd.DataFrame(data_overall_count)
+
+# Set up Seaborn bar plot
+sns.set(style='whitegrid')
+bar_plot_2 = sns.barplot(x='Category', y='Values', data=df_overall_count, palette='pastel')
+
+# Convert Seaborn bar plot to a pie chart
+fig_1, ax_1 = plt.subplots()
+
+# Pie chart settings
+colors = sns.color_palette('pastel')
+explode = (0.05, 0.05)
+ax_1.pie(df_overall_count['Values'], explode=explode, labels=df_overall_count['Category'], colors=colors, autopct='%1.1f%%', startangle=90)
+
+# Equal aspect ratio ensures that pie is drawn as a circle
+ax_1.axis('equal')
+ax_1.set_title('Proportion of Overall Customer Attrition', y=-0.2)
+
+# Display the pie chart in Streamlit
+m7.pyplot(fig_1)
+
+# value chart
+
+data_overall_value = {
+    'Category': ['Attrited Business', 'Retained Business'],
+    'Values': [overall_lost_business, overall_retained_business],
+}
+
+df_overall_value = pd.DataFrame(data_overall_value)
+
+# Set up Seaborn bar plot
+sns.set(style='whitegrid')
+bar_plot = sns.barplot(x='Category', y='Values', data=df_overall_value, palette='pastel')
+
+# Convert Seaborn bar plot to a pie chart
+fig_2, ax_2 = plt.subplots()
+
+# Pie chart settings
+colors = sns.color_palette('pastel')
+explode = (0.05, 0.05)
+ax_2.pie(df_overall_value['Values'], explode=explode, labels=df_overall_value['Category'], colors=colors, autopct='%1.1f%%', startangle=90)
+
+# Equal aspect ratio ensures that pie is drawn as a circle
+ax_2.axis('equal')
+ax_2.set_title('Proportion of Overall Business Attrition', y=-0.2)
+
+# Display the pie chart in Streamlit
+m8.pyplot(fig_2)
+
+# now for the interactive chart
+st.header('Slicing the Picture')
 st.info('Select features to filter by:')
 
 # Add a widget to choose variables
@@ -75,65 +133,10 @@ if total_filter > 0:
 else:
     sliced_churn_rate = 0
 
-m7, m8, m9 = st.columns((1, 1, 1))
+m9, m10, m11 = st.columns((1, 1, 1))
 
-m7.metric(label='Sliced Customer Population: ', value=f'{total_filter:,}')
-m8.metric(label='Population Churn Rate: ', value=str(sliced_churn_rate) + '%')
-m9.metric(label='Value of Lost Business: ', value=f'${lost_business:,}' + '.00')
+m9.metric(label='Sliced Customer Population: ', value=f'{total_filter:,}')
+m10.metric(label='Sliced Customer Attrition: ', value=str(sliced_churn_rate) + '%')
+m11.metric(label='Sliced Value of Business Lost: ', value=f'${lost_business:,}' + '.00')
 
-# pie charts of the population churn rate as well as the value of the balance lost on that population, to the balance retained
-m10, m11 = st.columns((1, 1))
-
-# population chart
-
-data_2 = {
-    'Category': ['Attrited', 'Retained'],
-    'Values': [count_attrition, count_retained],
-}
-
-df_pie_2 = pd.DataFrame(data_2)
-
-# Set up Seaborn bar plot
-sns.set(style='whitegrid')
-bar_plot_2 = sns.barplot(x='Category', y='Values', data=df_pie_2, palette='pastel')
-
-# Convert Seaborn bar plot to a pie chart
-fig_2, ax = plt.subplots()
-
-# Pie chart settings
-colors = sns.color_palette('pastel')
-explode = (0.05, 0.05)
-ax.pie(df_pie_2['Values'], explode=explode, labels=df_pie_2['Category'], colors=colors, autopct='%1.1f%%', startangle=90)
-
-# Equal aspect ratio ensures that pie is drawn as a circle
-ax.axis('equal')
-
-# Display the pie chart in Streamlit
-m10.pyplot(fig_2)
-
-# value chart
-
-data = {
-    'Category': ['Attrited', 'Retained'],
-    'Values': [lost_business, retained_business],
-}
-
-df_pie = pd.DataFrame(data)
-
-# Set up Seaborn bar plot
-sns.set(style='whitegrid')
-bar_plot = sns.barplot(x='Category', y='Values', data=df_pie, palette='pastel')
-
-# Convert Seaborn bar plot to a pie chart
-fig, ax = plt.subplots()
-
-# Pie chart settings
-colors = sns.color_palette('pastel')
-explode = (0.05, 0.05)
-ax.pie(df_pie['Values'], explode=explode, labels=df_pie['Category'], colors=colors, autopct='%1.1f%%', startangle=90)
-
-# Equal aspect ratio ensures that pie is drawn as a circle
-ax.axis('equal')
-
-# Display the pie chart in Streamlit
-m11.pyplot(fig)
+# sliced charts

@@ -175,13 +175,13 @@ try:
 
     # Set up Seaborn bar plot
     sns.set(style='whitegrid')
-    bar_plot_3 = sns.barplot(x='Category', y='Values', data=df_slice_count, palette='pastel6')
+    bar_plot_3 = sns.barplot(x='Category', y='Values', data=df_slice_count, palette='flare')
 
     # Convert Seaborn bar plot to a pie chart
     fig_3, ax_3 = plt.subplots()
 
     # Pie chart settings
-    colors_3 = sns.color_palette('pastel6')
+    colors_3 = sns.color_palette('flare')
     explode_3 = (0.05, 0.05)
     ax_3.pie(df_slice_count['Values'], explode=explode_3, labels=df_slice_count['Category'], colors=colors_3,
              autopct='%1.0f%%', startangle=90)
@@ -203,13 +203,13 @@ try:
 
     # Set up Seaborn bar plot
     sns.set(style='whitegrid')
-    bar_plot_4 = sns.barplot(x='Category', y='Values', data=df_slice_value, palette='pastel6')
+    bar_plot_4 = sns.barplot(x='Category', y='Values', data=df_slice_value, palette='flare')
 
     # Convert Seaborn bar plot to a pie chart
     fig_4, ax_4 = plt.subplots()
 
     # Pie chart settings
-    colors_4 = sns.color_palette('pastel6')
+    colors_4 = sns.color_palette('flare')
     explode_4 = (0.05, 0.05)
     ax_4.pie(df_slice_value['Values'], explode=explode_3, labels=df_slice_value['Category'], colors=colors_3,
              autopct='%1.0f%%', startangle=90)
@@ -235,13 +235,13 @@ try:
 
     # Set up Seaborn bar plot
     sns.set(style='whitegrid')
-    bar_plot_5 = sns.barplot(x='Category', y='Values', data=df_slice_count_2, palette='flare')
+    bar_plot_5 = sns.barplot(x='Category', y='Values', data=df_slice_count_2, palette='pastel6')
 
     # Convert Seaborn bar plot to a pie chart
     fig_5, ax_5 = plt.subplots()
 
     # Pie chart settings
-    colors_5 = sns.color_palette('flare')
+    colors_5 = sns.color_palette('pastel6')
     explode_5 = (0.05, 0.05, 0.05)
     ax_5.pie(df_slice_count_2['Values'], explode=explode_5, labels=df_slice_count_2['Category'], colors=colors_5,
              autopct='%1.0f%%', startangle=90)
@@ -264,13 +264,13 @@ try:
 
     # Set up Seaborn bar plot
     sns.set(style='whitegrid')
-    bar_plot_6 = sns.barplot(x='Category', y='Values', data=df_slice_count_2, palette='flare')
+    bar_plot_6 = sns.barplot(x='Category', y='Values', data=df_slice_count_2, palette='pastel6')
 
     # Convert Seaborn bar plot to a pie chart
     fig_6, ax_6 = plt.subplots()
 
     # Pie chart settings
-    colors_6 = sns.color_palette('flare')
+    colors_6 = sns.color_palette('pastel6')
     explode_6 = (0.05, 0.05, 0.05)
     ax_6.pie(df_slice_count_2['Values'], explode=explode_5, labels=df_slice_count_2['Category'], colors=colors_5,
              autopct='%1.0f%%', startangle=90)

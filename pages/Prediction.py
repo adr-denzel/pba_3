@@ -151,16 +151,20 @@ X = pd.DataFrame(input_dict)
 
 st.info('Select your inputs and press ***Predict*** to make a classification:')
 
+
+def predict_with_threshold(classifier, x, threshold=0.78):
+    y_proba = classifier.predict_proba(x)[:, 1]
+    y_pred = (y_proba >= threshold).astype(int)
+    return y_pred
+
+
 if st.sidebar.button("Predict"):
 
-    y_prediction = model.predict(X)
-    y_probability = model.predict_proba(X)
+    # Make predictions with the specific threshold
+    y_prediction = predict_with_threshold(model, X)
+    y_probability = model.predict_proba(X)[:, 1]
 
     if y_prediction == 1:
-        m2, m3 = st.columns((1, 1))
-        m2.metric('Prediction: ', value='Customer Retained')
-        m3.metric('Probability of Prediction: ', value=str(round(100 * y_probability[0, 1], 2)) + '%')
+        st.metric('Prediction: ', value='Customer Retained')
     else:
-        m4, m5 = st.columns((1, 1))
-        m4.metric('Prediction: ', value='Customer Lost')
-        m5.metric('Probability of Prediction: ', value=str(round(100 * y_probability[0, 0], 2)) + '%')
+        st.metric('Prediction: ', value='Customer Lost')

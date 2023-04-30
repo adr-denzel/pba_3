@@ -158,13 +158,96 @@ def predict_with_threshold(classifier, x, threshold=0.78):
     return y_pred
 
 
+custom_css = """
+<style>
+    .custom-metric h2 {
+        font-size: 32px;  # You can change this value to your desired font size
+    }
+    .custom-metric .stMetric-value {
+        font-size: 64px;  # You can change this value to your desired font size
+        color: blue;  # Set the text color to red
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
+</style>
+"""
+
+st.markdown(custom_css, unsafe_allow_html=True)
+
+
 if st.sidebar.button("Predict"):
 
+    m1, m2 = st.columns((1, 1))
     # Make predictions with the specific threshold
     y_prediction = predict_with_threshold(model, X)
     y_probability = model.predict_proba(X)[:, 1]
+    y_probability = str(round(100 * y_probability[0], 2)) + '%'
 
     if y_prediction == 1:
-        st.metric('Prediction: ', value='Customer Retained')
+
+        inline_css = "color: rgb(179, 229, 255);"
+
+        # Create an HTML template for the metric object
+        custom_metric_html = f"""
+            <div class="custom-metric">
+                <h2>Prediction:</h2>
+                <div class="stMetric-value" style="{inline_css}">Customer Retained</div>
+            </div>
+            """
+
+        custom_metric_html_2 = f"""
+                    <div class="custom-metric">
+                        <h2>Probability Score:</h2>
+                        <div class="stMetric-value" style="{inline_css}">{y_probability}</div>
+                    </div>
+                    """
+
+        m1.markdown(custom_metric_html, unsafe_allow_html=True)
+        m2.markdown(custom_metric_html_2, unsafe_allow_html=True)
     else:
-        st.metric('Prediction: ', value='Customer Lost')
+
+        inline_css = "color: rgb(255, 179, 179);"
+
+        # Create an HTML template for the metric object
+        custom_metric_html = f"""
+            <div class="custom-metric">
+                <h2>Prediction:</h2>
+                <div class="stMetric-value" style="{inline_css}">Customer Churned</div>
+            </div>
+            """
+
+        custom_metric_html_2 = f"""
+            <div class="custom-metric">
+                <h2>Probability Score:</h2>
+                <div class="stMetric-value" style="{inline_css}">{y_probability}</div>
+            </div>
+            """
+
+        m1.markdown(custom_metric_html, unsafe_allow_html=True)
+        m2.markdown(custom_metric_html_2, unsafe_allow_html=True)
+
+custom_css_2 = """
+<style>
+    .custom-info {
+        background-color: #FFB3B3;  /* Change the background color to pastel red */
+        color: black;  /* Change the text color to black */
+        border: 1px solid #FFB3B3;
+        border-radius: 5px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+</style>
+"""
+
+st.markdown(custom_css_2, unsafe_allow_html=True)
+
+info_text = 'Note: Probability scores must exceed decision threshold of 78% to be classified as \'Retained\' customers.'
+
+# Create an HTML block with the custom-info class
+custom_info_html = f"""
+<div class="custom-info">
+    {info_text}
+</div>
+"""
+
+# Add the custom info HTML block to the Streamlit app
+st.markdown(custom_info_html, unsafe_allow_html=True)
